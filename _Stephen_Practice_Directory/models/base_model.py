@@ -2,7 +2,7 @@
 
 import uuid
 from datetime import datetime
-from models import storage
+
 
 """Defining a class called BaseModel which will define all common attributes/methods for other classes"""
 
@@ -11,6 +11,7 @@ class BaseModel:
     methods will follow now"""
     
     def __init__(self, *args, **kwargs):
+        from models import storage
         """Initialization function that's called when a new instance
         of the class is created"""
         if kwargs and len(kwargs) > 0:
@@ -33,6 +34,7 @@ class BaseModel:
         return string
     
     def save(self):
+        from models import storage
         """Public method that updates the instance of the class"""
         self.updated_at = datetime.now();
         storage.save()
