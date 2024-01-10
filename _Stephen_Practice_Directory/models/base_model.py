@@ -40,10 +40,10 @@ class BaseModel:
     def to_dict(self):
         """Public instance method that return a dictionary representation of all key/values of __dict__ of the instance 
         """
-        inst_dict = self.__dict__
+        inst_dict = self.__dict__.copy()
         inst_dict["__class__"] = self.__class__.__name__
-        inst_dict["created_at"] = datetime.isoformat(self.created_at)
-        inst_dict["updated_at"] = datetime.isoformat(self.updated_at)
+        inst_dict["created_at"] = self.created_at.isoformat()
+        inst_dict["updated_at"] = self.updated_at.isoformat()
         
         return inst_dict
     

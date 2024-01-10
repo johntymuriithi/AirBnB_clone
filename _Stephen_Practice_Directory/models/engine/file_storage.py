@@ -9,7 +9,7 @@ from datetime import datetime
 
 class FileStorage:
     """The File Storage class that will have attributes and methods used for JSON dumps and loads of instance to and from dict to string to file"""
-    __file_path = ""
+    __file_path = "file.json"
     __objects = {}
     
     def __init__(self):
@@ -28,17 +28,24 @@ class FileStorage:
         # obj.created_at = datetime.isoformat(obj.created_at)
         # obj.updated_at = datetime.isoformat(obj.updated_at)
         
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj.__dict__
-        
-        print(self.__objects)
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
     
     def save(self):
         """Serializes __objects to the JSON file in path: __file_path"""
-        serialized = json.dumps(self.__objects)
+
+        serializable_objects = {}
+        
+        for key, obj in self.__objects.items():
+            serializable_objects[key] = obj.to_dict()
+        
+        serialized = json.dumps(serializable_objects)
         
         # Open a file on the file path in the public class attribute and write the serialized string to it
-        with open(self.__file_path, "w") as file:
-            file.write(serialized)
+        try:
+            with open(self.__file_path, "w") as file:
+                file.write(serialized)
+        except Exception:
+            pass
         
     def reload(self):
         """Deserializes the JSON file to __objects """
