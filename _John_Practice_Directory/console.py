@@ -110,6 +110,34 @@ class HBNBCommand(cmd.Cmd):
         string_representations = [str(instance) for instance in instances]
         print(string_representations)
 
+        def do_update(self, line):
+        """Updates an instance based on the class name and id by adding or updating attribute."""
+        from __init__ import storage
+
+        args = line.split()
+
+        # classname = args[0]
+        # instance_id = args[1]
+        attrname = args[0]
+        attrvalue = args[1]
+
+        objects = storage.all()
+        thiskey = "BaseModel.1f087f50-05fe-4cf8-81ac-0c2e598c0d2b"
+        #
+        # if thiskey not in objects:
+        #     print("** No instance found **")
+        #     return
+
+        result_dict = {key: value.to_dict() for key, value in objects.items()}
+        print(result_dict)
+        for key, value in result_dict.items():
+            if key == thiskey:
+                value[str(attrname)] = str(attrvalue)
+                print(value)
+
+        storage.__objects = result_dict
+        storage.reload()
+
     def emtyline(self):
         """emty line or enter pressed"""
         return
