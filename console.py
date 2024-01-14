@@ -221,7 +221,8 @@ class HBNBCommand(cmd.Cmd):
     def do_quit(self, line):
         """Quit command to exit the program"""
         return True
-
+    
+    # quit the program due to interuppts
     def do_EOF(self, line):
         """end of file marker is here"""
         return True
