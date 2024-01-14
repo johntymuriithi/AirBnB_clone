@@ -73,8 +73,8 @@ class FileStorage:
 
                 new_objects = {}
                 for key, value in deserialized.items():
-                    vv = value['__class__']
-                    obj = eval(vv)(**value)
+                    classie = value['__class__']
+                    obj = eval(classie)(**value)
                     new_objects[key] = obj
 
                 self.__objects = new_objects
