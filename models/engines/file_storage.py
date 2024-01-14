@@ -7,6 +7,7 @@ import json
 import os
 from datetime import datetime
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -27,13 +28,8 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        """Sets in the __object diction the objec with key <obj class name.id"""
-
-        # self.__objects = {**self.__objects, f"{obj.__class__.__name__}.{obj.id}": obj}
-        # self.__objects.obj.__class__ = obj
-        # obj.created_at = datetime.isoformat(obj.created_at)
-        # obj.updated_at = datetime.isoformat(obj.updated_at)
-
+        """Sets in the __object diction the objec with key
+        <obj class name.id"""
         self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
@@ -46,14 +42,15 @@ class FileStorage:
             # BaseModel, if it is, then convert it to a dictionary
             # else, say it's already a dictionary, then just save
             # it like that
-            if isinstance(obj, BaseModel):
+            if isinstance(obj, BaseModel) or isinstance(obj, User):
                 obj = obj.to_dict()
 
             serializable_objects[key] = obj
 
         serialized = json.dumps(serializable_objects)
 
-        # Open a file on the file path in the public class attribute and write the serialized string to it
+        # Open a file on the file path in the public class attribute
+        # and write the serialized string to it
         try:
             with open(self.__file_path, "w") as file:
                 file.write(serialized)
@@ -66,14 +63,21 @@ class FileStorage:
             # means it exists
             # Read the file content into a variable
             file_content = ""
-            with open(self.__file_path, "r") as file:
-                file_content = file.read()
 
-            # Now pass in the read content into the json.loads()
-            deserialized = json.loads(file_content)
-            new_objects = {}
-            for key, value in deserialized.items():
-                obj = BaseModel(**value)
-                new_objects[key] = obj
+            try:
+                with open(self.__file_path, "r") as file:
+                    file_content = file.read()
 
-            self.__objects = new_objects
+                # Now pass in the read content into the json.loads()
+                deserialized = json.loads(file_content)
+
+                new_objects = {}
+                for key, value in deserialized.items():
+                    vv = value['__class__']
+                    obj = eval(vv)(**value)
+                    new_objects[key] = obj
+
+                self.__objects = new_objects
+
+            except Exception:
+                pass

@@ -4,11 +4,10 @@
 
 from models.base_model import BaseModel
 from datetime import datetime
-import uuid
 
 
-class User(BaseModel):
-    """User class that inherits from BaseModel"""
+class Amenity(BaseModel):
+    """Amenity class that inherits from BaseModel"""
 
     def __init__(self, *args, **kwargs):
         """Initialization function that's called when a new instance
@@ -25,12 +24,5 @@ class User(BaseModel):
                         setattr(self, key, value)
         else:
             super().__init__()
-            # self.id = str(uuid.uuid4())
-            # self.created_at = datetime.now()
-            # self.updated_at = datetime.now()
-            self.email = ""
-            self.password = ""
-            self.first_name = ""
-            self.last_name = ""
-
+            self.name = ""
             storage.new(self)

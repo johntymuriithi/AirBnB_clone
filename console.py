@@ -2,12 +2,18 @@
 
 """The Driver Code that Launches the Console"""
 
-# Coding Starts here 
+# Coding Starts here
 import cmd
 import sys
 import datetime
 
 from models.base_model import BaseModel
+from models.user import User
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.state import State
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -23,17 +29,18 @@ class HBNBCommand(cmd.Cmd):
             return
 
         classname = args[0]
-        if classname not in ["BaseModel"]:
+        if classname not in ["BaseModel", "User", "State", "City",
+                             "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
             return
 
         new_instance = eval(f"{classname}()")
-        # print(new_instance)
         new_instance.save()
-        # print(new_instance.id)
+        print(new_instance.id)
 
     def do_show(self, line):
-        """Prints the string representation of an instance based on class name and id."""
+        """Prints the string representation of an instance b
+        ased on class name and id."""
 
         from models import storage
 
@@ -43,7 +50,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ["BaseModel"]:
+        if class_name not in ["BaseModel", "User", "State", "City",
+                              "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
             return
 
@@ -53,7 +61,6 @@ class HBNBCommand(cmd.Cmd):
 
         instance_id = args[1]
         objects = storage.all()
-        # print(objects)
 
         thekey = f"{class_name}.{instance_id}"
 
@@ -63,14 +70,12 @@ class HBNBCommand(cmd.Cmd):
 
         for key, value in objects.items():
             if key == thekey:
-                # valuee = str(value)
-                # print(f'{valuee}')
-                print(key)
                 print(value)
                 break
 
     def do_destroy(self, line):
-        """Deletes an instance based on the class name and id (save the change into the JSON file)."""
+        """Deletes an instance based on the class name and id
+        (save the change into the JSON file)."""
 
         from models import storage
 
@@ -80,7 +85,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in ["BaseModel"]:
+        if class_name not in ["BaseModel", "User", "State", "City",
+                              "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
             return
 
@@ -90,35 +96,50 @@ class HBNBCommand(cmd.Cmd):
 
         instance_id = args[1]
         objects = storage.all()
-        key = f"{class_name}.{instance_id}"
+        key_check = f"{class_name}.{instance_id}"
 
-        if key not in objects:
+        if key_check not in objects:
             print("** no instance found **")
             return
 
-        new_object = {key: value for key, value in objects.items() if key != instance_id}
-        storage.__objects = new_object
+        # The dictionary returned by storage.all are still linked by reference
+        # So modifying the objects on the new variable still affects the
+        # original
+        # Creating a new object with object-comprehension breaks that link to
+        # the storage.__objects
+
+        # Note: Doing storage.__objects for a private class attribute
+        # outside the Class, you'll end up getting something like
+        # storage.HBNBCommand__objects/ This is name mangling that
+        # prevents accessing a private attribute from
+        # outside a class
+
+        del objects[key_check]
+
         storage.save()
+        # storage.reload()
 
     def do_all(self, line):
         """
-        Prints all string representation of all instances based or not on the class name.
-        The printed result must be a list of strings.
-        If the class name doesn’t exist, print ** class doesn't exist ** (ex: $ all MyModel)
+        Prints all string representation of all instances based or not on the
+        class name. The printed result must be a list of strings.
+        If the class name doesn’t exist, print ** class doesn't exist
+        ** (ex: $ all MyModel)
         """
-
         from models import storage
 
         args = line.split()
 
-        if args and args[0] not in ["BaseModel"]:
+        if args and args[0] not in ["BaseModel", "User", "State",
+                                    "City", "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
             return
 
         objects = storage.all()
         if args:
             classname = args[0]
-            filtered_objects = {k: v for k, v in objects.items() if k.startswith(classname)}
+            filtered_objects = {k: v for k, v in objects.items()
+                                if k.startswith(classname)}
             instances = filtered_objects.values()
         else:
             instances = objects.values()
@@ -127,14 +148,16 @@ class HBNBCommand(cmd.Cmd):
         print(string_representations)
 
     def do_update(self, line):
-        """Updates an instance based on the class name and id by adding or updating attribute."""
+        """Updates an instance based on the class name and id by adding
+        or updating attribute."""
 
         from models import storage
 
         args = line.split()
 
         # TO DO
-        # We need to find a way to split string so that values in double quotes are not split
+        # We need to find a way to split string so that values in double
+        # quotes are not split
         # How do we cast values to appropriate type?
         # Do we combine try except and them int() and float()?
 
@@ -144,7 +167,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         # Check if Classname provided doesn't exist i.e not BaseModel
-        if args and args[0] not in ["BaseModel"]:
+        if args and args[0] not in ["BaseModel", "User", "State", "City",
+                                    "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
             return
 
@@ -160,6 +184,7 @@ class HBNBCommand(cmd.Cmd):
 
         if len(args) < 4:
             print("** value missing **")
+            return
 
         classname = args[0]
         instance_id = args[1]
@@ -176,14 +201,16 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
 
-            # These objects are already pointing to the original objects in the storage.all()
-            # So no need to reassign the object of those objects to storage.__objects
+            # These objects are already pointing to the original
+            # objects in the storage.all()
+            # So no need to reassign the object of those objects
+            # to storage.__objects
             # Just set the key and save + reload
             foundkeyobj = retrieved_objects[thiskey]
             setattr(foundkeyobj, attrname, attrvalue)
 
         storage.save()
-        storage.reload()
+        # storage.reload()
 
     def emtpyline(self):
         """emty line or enter pressed"""
@@ -197,13 +224,14 @@ class HBNBCommand(cmd.Cmd):
         """end of file marker is here"""
         return True
 
+    # if sys.stdin.isatty():
+    #     HBNBCommand().cmdloop()
+    # else:
+    #     interpreter = HBNBCommand()
+    #     for line in sys.stdin:
+    #         command = line.strip()  # Remove any trailing newline characters
+    #         interpreter.onecmd(command)
+
 
 if __name__ == '__main__':
-    # We need to work more on non-interactive mode too
-    if sys.stdin.isatty():
-        HBNBCommand().cmdloop()
-    else:
-        interpreter = HBNBCommand()
-        for line in sys.stdin:
-            command = line.strip()  # Remove any trailing newline characters
-            interpreter.onecmd(command)
+    HBNBCommand().cmdloop()

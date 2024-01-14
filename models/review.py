@@ -1,14 +1,13 @@
 #!/usr/bin/python3
-"""Definition of the Class Model
+"""Definition of the Review Class Model
 - Inheriting from the Base Model"""
 
 from models.base_model import BaseModel
 from datetime import datetime
-import uuid
 
 
-class User(BaseModel):
-    """User class that inherits from BaseModel"""
+class Review(BaseModel):
+    """Review class that inherits from BaseModel"""
 
     def __init__(self, *args, **kwargs):
         """Initialization function that's called when a new instance
@@ -25,12 +24,7 @@ class User(BaseModel):
                         setattr(self, key, value)
         else:
             super().__init__()
-            # self.id = str(uuid.uuid4())
-            # self.created_at = datetime.now()
-            # self.updated_at = datetime.now()
-            self.email = ""
-            self.password = ""
-            self.first_name = ""
-            self.last_name = ""
-
+            self.place_id = ""
+            self.user_id = ""
+            self.text = ""
             storage.new(self)

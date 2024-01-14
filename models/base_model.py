@@ -3,7 +3,8 @@
 import uuid
 from datetime import datetime
 
-"""Defining a class called BaseModel which will define all common attributes/methods for other classes"""
+"""Defining a class called BaseModel which will define all common
+attributes/methods for other classes"""
 
 
 class BaseModel:
@@ -29,8 +30,10 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
-        """String printing instance method that prints the string representation of the instance """
-        string = "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        """String printing instance method that prints the string
+        representation of the instance """
+        string = "[{}] ({}) {}".format(self.__class__.__name__,
+                                       self.id, self.__dict__)
         return string
 
     def save(self):
@@ -40,7 +43,8 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        """Public instance method that returns a dictionary representation of all key/values in __dict__."""
+        """Public instance method that returns a dictionary representation
+        of all key/values in __dict__."""
         inst_dict = self.__dict__.copy()
         inst_dict["__class__"] = self.__class__.__name__
 
@@ -51,4 +55,3 @@ class BaseModel:
             inst_dict["updated_at"] = datetime.isoformat(self.updated_at)
 
         return inst_dict
-
