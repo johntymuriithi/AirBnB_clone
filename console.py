@@ -113,6 +113,7 @@ class HBNBCommand(cmd.Cmd):
         # storage.HBNBCommand__objects/ This is name mangling that
         # prevents accessing a private attribute from
         # outside a class
+        
 
         del objects[key_check]
 
@@ -215,7 +216,8 @@ class HBNBCommand(cmd.Cmd):
     def emtpyline(self):
         """emty line or enter pressed"""
         return
-
+    
+    # quit command to wuit the program
     def do_quit(self, line):
         """Quit command to exit the program"""
         return True
