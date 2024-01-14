@@ -214,7 +214,7 @@ class HBNBCommand(cmd.Cmd):
         # storage.reload()
         
     # supports empty lines or Enter key
-    def emtpyline(self):
+    def emptyline(self):
         """emty line or enter pressed"""
         return
     
