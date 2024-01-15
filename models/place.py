@@ -9,7 +9,7 @@ from datetime import datetime
 class Place(BaseModel):
     """Place class that inherits from BaseModel"""
     
-    secity_id = ""
+    city_id = ""
     user_id = ""
     name = ""
     description = ""
