@@ -16,11 +16,15 @@ class TestFileStorage(unittest.TestCase):
         self.baseModal = BaseModel()
         self.storage = FileStorage()
     
-    # def tearDown(self):
-    #     """clean up test files"""
-    #     FileStorage.__FileStorage__objects = {}
+    def tearDown(self):
+        """clean up test files"""
+        FileStorage.__FileStorage__objects = {}
+        
     def test_all(self):
+        """test all method"""
+        obj = FileStorage.__FileStorage__objects
         result = self.storage.all()
         self.assertEqual(type(result), dict)
+        self.assertEqual(result, obj)
     
     
