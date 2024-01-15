@@ -33,4 +33,4 @@ class User(BaseModel):
             self.first_name = ""
             self.last_name = ""
 
-            storage.new()
+            storage.new(self)
