@@ -15,22 +15,22 @@ class User(BaseModel):
         of the class is created"""
         from models import storage
 
-        # if kwargs and len(kwargs) > 0:
-        #     # Iterate through the dictionary and get the key/value pairs
-        #     for key, value in kwargs.items():
-        #         if key != "__class__":
-        #             if key == "created_at" or key == "updated_at":
-        #                 setattr(self, key, datetime.fromisoformat(value))
-        #             else:
-        #                 setattr(self, key, value)
-        # else:
-        super().__init__(*args, **kwargs)
+        if kwargs and len(kwargs) > 0:
+            # Iterate through the dictionary and get the key/value pairs
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    if key == "created_at" or key == "updated_at":
+                        setattr(self, key, datetime.fromisoformat(value))
+                    else:
+                        setattr(self, key, value)
+        else:
+            super().__init__(*args, **kwargs)
             # self.id = str(uuid.uuid4())
             # self.created_at = datetime.now()
             # self.updated_at = datetime.now()
-        self.email = ""
-        self.password = ""
-        self.first_name = ""
-        self.last_name = ""
+            self.email = ""
+            self.password = ""
+            self.first_name = ""
+            self.last_name = ""
 
-        storage.new(self)
+            storage.new(self)
