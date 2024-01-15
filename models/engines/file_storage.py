@@ -1,0 +1,83 @@
+#!/usr/bin/python3
+
+"""Creating a Class called File Storage:
+This will be use for the process of serialization and deserialization """
+
+import json
+import os
+from datetime import datetime
+from models.base_model import BaseModel
+from models.user import User
+
+
+class FileStorage:
+    """The File Storage class that will have attributes and
+    methods used for JSON dumps and loads of instance to and
+    from dict to string to file"""
+
+    __file_path = "file.json"
+    __objects = {}
+
+    def __init__(self):
+        """The init function that is called when an object is
+        being instantiated from the class"""
+        pass
+
+    def all(self):
+        """Returns the dictionary - the public class attribute"""
+        return self.__objects
+
+    def new(self, obj):
+        """Sets in the __object diction the objec with key
+        <obj class name.id"""
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+
+    def save(self):
+        """Serializes __objects to the JSON file in path: __file_path"""
+
+        serializable_objects = {}
+
+        for key, obj in self.__objects.items():
+            # Confirm if what is coming is an instance of the
+            # BaseModel, if it is, then convert it to a dictionary
+            # else, say it's already a dictionary, then just save
+            # it like that
+            if isinstance(obj, BaseModel) or isinstance(obj, User):
+                obj = obj.to_dict()
+
+            serializable_objects[key] = obj
+
+        serialized = json.dumps(serializable_objects)
+
+        # Open a file on the file path in the public class attribute
+        # and write the serialized string to it
+        try:
+            with open(self.__file_path, "w") as file:
+                file.write(serialized)
+        except [FileNotFoundError, FileNotFoundError]:
+            pass
+
+    def reload(self):
+        """Deserializes the JSON file to __objects """
+        if os.path.exists(self.__file_path):
+            # means it exists
+            # Read the file content into a variable
+            file_content = ""
+
+            try:
+                with open(self.__file_path, "r") as file:
+                    file_content = file.read()
+
+                # Now pass in the read content into the json.loads()
+                deserialized = json.loads(file_content)
+
+                new_objects = {}
+                for key, value in deserialized.items():
+                    vv = value['__class__']
+                    obj = eval(vv)(**value)
+                    new_objects[key] = obj
+
+                self.__objects = new_objects
+
+            except Exception:
+                pass
