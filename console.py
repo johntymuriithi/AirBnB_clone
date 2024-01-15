@@ -2,7 +2,7 @@
 
 """The Driver Code that Launches the Console"""
 
-# Coding Starts here
+# Coding Starts here, alright
 import cmd
 import sys
 import datetime

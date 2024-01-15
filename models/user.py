@@ -24,6 +24,7 @@ class User(BaseModel):
                     else:
                         setattr(self, key, value)
         else:
+            # I screaded up here
             super().__init__()
             # self.id = str(uuid.uuid4())
             # self.created_at = datetime.now()
