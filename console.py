@@ -212,7 +212,7 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
         # storage.reload()
 
-    def emtpyline(self):
+    def emptyline(self):
         """emty line or enter pressed"""
         return
 
