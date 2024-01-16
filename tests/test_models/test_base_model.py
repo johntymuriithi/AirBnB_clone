@@ -43,10 +43,8 @@ class TestBaseModel(unittest.TestCase):
     def test_save(self):
         instance = BaseModel()
         initial_updated_at = instance.updated_at
-        
         instance.save()
-        # newupdateat = instance.updated_at
-        # self.assertNotEqual(newupdateat, initial_updated_at)
+        self.assertNotEqual(instance.updated_at, initial_updated_at)
         self.assertEqual(storage.all()[f"BaseModel.{instance.id}"], instance)
 
     def test_to_dict(self):
