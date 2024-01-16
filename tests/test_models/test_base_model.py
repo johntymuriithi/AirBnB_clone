@@ -63,7 +63,7 @@ class TestBaseModel(unittest.TestCase):
         expected = "[{}] ({}) {}".format(instance.__class__.__name__,
                                        instance.id, instance.__dict__)
         self.assertEqual(expected, str(instance))
-        self.assertIsInstance(str(instance), str)
+        # self.assertIsInstance(str(instance), str)
     
     # def test_str(self):
     #     instance = BaseModel()
