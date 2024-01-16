@@ -57,6 +57,18 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(instance_dict['city'], 'New York')
         self.assertTrue(isinstance(instance_dict['created_at'], str))
         self.assertTrue(isinstance(instance_dict['updated_at'], str))
+    
+    def test_str1(self):
+        instance = BaseModel()
+        expected = "[{}] ({}) {}".format(instance.__class__.__name__,
+                                       instance.id, instance.__dict__)
+        self.assertEqual(expected, str(instance))
+        self.assertIsInstance(instance.__str__, str)
+    
+    # def test_str(self):
+    #     instance = BaseModel()
+        
+
 
 
 if __name__ == '__main__':
